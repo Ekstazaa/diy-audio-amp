@@ -33,7 +33,7 @@ Still, from a design perspective, the CFP offers better linearity and thermal be
 
 To wrap up the topic of output stage topologies, I should also mention triple configurations, which basically just add more transistors to the chain. From what I’ve read, these are mostly used in commercial designs, where high current efficiency is a priority. As you can probably guess, that kind of complexity isn’t really necessary for this DIY project.
 
-## Theory of shicali
+## Theory of shiklai
 
 Let's look at this configuration:
 
@@ -48,12 +48,40 @@ In that configuration i used also ressistor R1. It helps to turn off/on Q1 by cr
 ## Simulations
 
 Screenshot of testbench:
-![image](https://github.com/user-attachments/assets/5c2e29cd-9dc6-40d9-a26d-e5a6b267129a)
+![image](https://github.com/user-attachments/assets/4c06d760-c8f7-4eee-a232-570ad15c55c2)
 
+In this configuration, the two main things I can tweak are the transistors in the Sziklai pair and the resistors. For the control transistors, I chose BC556B and BC557B, mainly to keep the design coherent — differencial pair, current soures and VAS I used the same.
 
+As for the power transistors, I went with 2SA1943 and 2SC5200. I picked these mostly based on cost and availability. Honestly, I don’t have much experience with selecting "ideal" transistors yet, so I just chose the most common and affordable ones I could find.
 
+After analyzing the transistors, I tested the influence of resistors R1 and R2 by sweeping their values in LTspice.
 
+| R [Ω] | THD [%] | Idn_avg [mA] |
+|-------|---------|--------------|
+| 100   | 0.109   | 98.32        |
+| 200   | 0.091   | 111.81       |
+| 300   | 0.073   | 118.35       |
+| 400   | 0.060   | 122.52       |
+| 500   | 0.050   | 125.58       |
+| 600   | 0.043   | 128.03       |
+| 700   | 0.037   | 130.16       |
+| 800   | 0.032   | 131.92       |
+| 900   | 0.030   | 133.34       |
+| 1000  | 0.027   | 134.51       |
+| 2000  | 0.034   | 140.70       |
+| 4000  | 0.039   | 143.84       |
 
-bibliography:
+Up to around 1kΩ, the THD decreases noticeably, which is clearly visible in the waveform plots. You can see that for values below 700Ω, the sinewave becomes visibly distorted, confirming the theory that a too small resistor in this configuration reduces linearity. On the other hand, if the resistance increases, we must give more average current flowing through the pair - this means a certain compromise. It is worth noting that for small resistances (100-300Ω) the current changes are more sensitive.
+
+Moreover, for values above 1 kΩ, THD is rising back, because the Sziklai pair remains in saturation throughout the entire signal cycle, effectively making the amplifier operate in class A.
+The reason for this is that the pair becomes too slow — the driver transistor is unable to discharge the power transistor’s base quickly enough, keeping it continuously active.
+
+Overall, I think the best option is to choose a 470 Ω resistor (E6 series), because we're in the less sensitive region of the Idn_avg(R) curve. It also gives us some thermal headroom — if the resistance increases due to temperature, it's still safe — and THD remains at a good level. Anyway if there is a problem on the pcb board, it will not be a difficult change. 
+
+![image](https://github.com/user-attachments/assets/eb58f046-b7df-4503-b0d3-8a784669f3da)
+
+At the end 
+
+Bibliography:
 1. Douglas Self, Audio Power Amplifier Design Handbook 4th edition, Elsevier, 2006
 2. Rod Elliott, Compound Pair Vs. Darlington Pairs, https://sound-au.com/articles/cmpd-vs-darl.htm, 2011
