@@ -37,7 +37,7 @@ To wrap up the topic of output stage topologies, I should also mention triple co
 
 Let's look at this configuration:
 
-![image](https://github.com/user-attachments/assets/a2561511-7f27-4a94-a2d2-6a0555689756)
+<img src="https://github.com/user-attachments/assets/a2561511-7f27-4a94-a2d2-6a0555689756" width="500" height="600">
 
 The Shiklai pair is made of a power transistor (Q1) and control transistor (Q2). The main idea is to make the vout closely follow vin. When vin increases, Q2 starts to conduct more, which means that the base current of Q1 also increases. As a result, the output current delivered to the load goes up, causing vout to rise, so as to ensure a constant voltage drop across Q2's Vbe.
 
@@ -47,40 +47,43 @@ In that configuration i used also ressistor R1. It helps to turn off/on Q1 by cr
 
 ## Simulations
 
-Screenshot of testbench:
-![image](https://github.com/user-attachments/assets/4c06d760-c8f7-4eee-a232-570ad15c55c2)
+In the testbench, I used the same current source that will be implemented in the final amplifier design to make the simulation results more realistic. The circuit was tested with a ±10 V, 1 kHz input signal, and the analysis covered 10 cycles. A 32 Ω resistor was used as the load:
 
-In this configuration, the two main things I can tweak are the transistors in the Sziklai pair and the resistors. For the control transistors, I chose BC556B and BC557B, mainly to keep the design coherent — differencial pair, current soures and VAS I used the same.
+Screenshot of testbench:
+
+<img src="https://github.com/user-attachments/assets/ef2e7075-d2fc-4220-9793-0461b7ba6d50" width="800" height="700">
+
+The two main things I can tweak are the transistors in the Sziklai pair and the resistors. For the control transistors, I chose BC556B and BC557B, mainly to keep the design coherent — differencial pair, current soures and VAS I used the same.
 
 As for the power transistors, I went with 2SA1943 and 2SC5200. I picked these mostly based on cost and availability. Honestly, I don’t have much experience with selecting "ideal" transistors yet, so I just chose the most common and affordable ones I could find.
 
 After analyzing the transistors, I tested the influence of resistors R1 and R2 by sweeping their values in LTspice.
 
-| R [Ω] | THD [%] | Idn_avg [mA] |
-|-------|---------|--------------|
-| 100   | 0.109   | 98.32        |
-| 200   | 0.091   | 111.81       |
-| 300   | 0.073   | 118.35       |
-| 400   | 0.060   | 122.52       |
-| 500   | 0.050   | 125.58       |
-| 600   | 0.043   | 128.03       |
-| 700   | 0.037   | 130.16       |
-| 800   | 0.032   | 131.92       |
-| 900   | 0.030   | 133.34       |
-| 1000  | 0.027   | 134.51       |
-| 2000  | 0.034   | 140.70       |
-| 4000  | 0.039   | 143.84       |
+| R [Ω] | THD [%] | AVG(i(vup)) [mA] | AVG(i(vdn)) [mA] |
+|-------|---------|------------------|------------------|
+| 100   | 0.0885  | 108.936          | -88.531          |
+| 200   | 0.0689  | 109.449          | -89.033          |
+| 300   | 0.0808  | 111.864          | -91.442          |
+| 400   | 0.0808  | 113.779          | -93.353          |
+| 500   | 0.0775  | 115.219          | -94.790          |
+| 600   | 0.0753  | 116.255          | -95.824          |
+| 700   | 0.0724  | 117.143          | -96.712          |
+| 800   | 0.0704  | 117.841          | -97.408          |
+| 900   | 0.0676  | 118.486          | -98.054          |
+| 1000  | 0.0659  | 119.007          | -98.575          |
+| 2000  | 0.0554  | 122.078          | -101.644         |
+| 3000  | 0.0513  | 123.594          | -103.158         |
+| 4000  | 0.0492  | 124.566          | -104.128         |
+| 5000  | 0.0476  | 125.261          | -104.827         |
+| 10000 | 0.0439  | 127.274          | -106.830         |
 
-Up to around 1kΩ, the THD decreases noticeably, which is clearly visible in the waveform plots. You can see that for values below 700Ω, the sinewave becomes visibly distorted, confirming the theory that a too small resistor in this configuration reduces linearity. On the other hand, if the resistance increases, we must give more average current flowing through the pair - this means a certain compromise. It is worth noting that for small resistances (100-300Ω) the current changes are more sensitive.
+As a reminder, the resistor is used to accelerate the switching of the power transistors. The chart shows that when the resistance is high, the circuit struggles to turn off transistors Q1 and Q3. For values around 10 kΩ and higher, the transistors remain on throughout the entire cycle and operate in saturation. This indicates that the circuit behaves like a Class A amplifier.
 
-Moreover, for values above 1 kΩ, THD is rising back, because the Sziklai pair remains in saturation throughout the entire signal cycle, effectively making the amplifier operate in class A.
-The reason for this is that the pair becomes too slow — the driver transistor is unable to discharge the power transistor’s base quickly enough, keeping it continuously active.
+Additionally, the average current through the branch increases with higher resistance values. To reduce power consumption, lower resistor values are needed. However, this comes with a trade-off: reducing the resistance increases THD and decreases linearity (you can see the breakdown in the characteristic). As always, it’s a matter of compromise.
 
-Overall, I think the best option is to choose a 470 Ω resistor (E6 series), because we're in the less sensitive region of the Idn_avg(R) curve. It also gives us some thermal headroom — if the resistance increases due to temperature, it's still safe — and THD remains at a good level. Anyway if there is a problem on the pcb board, it will not be a difficult change. 
+I initially spent a lot of time analyzing that configuration for myself, but in practice, using 100Ω, 200Ω, or 300Ω doesn't really make much of a difference, since the resistance will drift with temperature regardless. The safest option is to choose a 330 Ω resistor from the E6 series.
 
-![image](https://github.com/user-attachments/assets/eb58f046-b7df-4503-b0d3-8a784669f3da)
-
-At the end 
+![image](https://github.com/user-attachments/assets/677a652e-87c0-4563-81ee-60e71a3d1417)
 
 Bibliography:
 1. Douglas Self, Audio Power Amplifier Design Handbook 4th edition, Elsevier, 2006
