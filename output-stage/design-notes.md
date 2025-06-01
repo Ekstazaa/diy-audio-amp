@@ -1,21 +1,3 @@
-# **Output Stage**
-
-## Test Conditions
-
-All key measurements and simulations of the output stage will primarily be conducted under the following conditions:
-
-- **Signal Frequency:** 1kHz and 20kHz  
-- **Input Amplitude:** 20V peak-to-peak (Vpp)
-- **Load Impedances:** 32 Ω and 64 Ω
-
-These parameters were chosen as they represent a typical use-case scenario in audio applications and allow clear observation of linearity, distortion, and thermal behavior.
-
-Based on the book written by Douglas[1], I will be testing this block based on specific parameters:
-
-- **Total Harmonic Distortion (THD)**  
-- **Power efficiency**
-- **Noise**
-
 ## Output Stage Configurations
 
 Before getting into the test results, I want to briefly go over the most common output stage configurations found in audio amplifiers. The two that come up the most are:
