@@ -6,4 +6,14 @@ For the input stage, the most common solution is a differential pair. The main a
 
 In audio design books, the best choice for input stages are.. BJT. The main reasons are their higher linearity, greater gain, and better temperature stability compared to FETs. The only real drawback of BJTs is the presence of base current, which reduces input impedance. However, in most cases, this trade-off is worth it due to the other significant advantages.
 
-Since my VAS transistor wiil be NPN, it's generally a good idea to use the opposite type for the input differential pair to ensure proper current flow and biasing. I chose BC556B because it's cheap, has decent gain, and produces low noise. And since this is a through-hole design, I can always swap the transistor later if needed.
+Since my VAS transistor will be NPN, it's generally a good idea to use the opposite type for the input differential pair to ensure proper current flow and biasing. I chose BC556B because it's cheap, has decent gain, and produces low noise. And since this is a through-hole design, I can always swap the transistor later if needed.
+
+For load mirror i used from same family NPN BC557.
+
+## AC analisys
+Testbenchs
+![image](https://github.com/user-attachments/assets/ada0583e-eefa-4cfc-8fd2-77616fac5110)
+
+
+![image](https://github.com/user-attachments/assets/650d08ce-0dd8-4eb8-aeb1-e1405355f249)
+
