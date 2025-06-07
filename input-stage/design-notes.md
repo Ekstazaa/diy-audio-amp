@@ -18,15 +18,18 @@ As current source I used this configuration:
 
 This setup gives me around 2.34 mA. If I need more, I can simply reduce R2. It's a really simple solution, but it has one drawback, current flows continuously through R1.
 
-## Analisys of design
+# Analisys of design
 
-I will try to explain my configuration on whole circuit, the result will be more realistic with load instead without it.
+## DC
 
-![image](https://github.com/user-attachments/assets/0773d6ad-4286-4de9-bc2a-367374035463)
+![image](https://github.com/user-attachments/assets/1b2819e3-61c3-4966-965a-6cf3969fbc8d)
+![image](https://github.com/user-attachments/assets/0156c188-108b-4c87-997a-081deb0d2183)
 
-First, I’d like to explain the concept of source degeneration. It involves adding a resistor to the source/emitter of a transistor, which creates local negative feedback. As a result, the source voltage starts to follow the gate/base voltage more closely. This feedback mechanism reduces the transistor’s gain, but improves linearity and stability. In practice, it makes it harder for the transistor to enter non-linear regions of operation, which can improve THD value.
 
-# Degradation of load:
+
+I’d like to explain the concept of source degeneration. It involves adding a resistor to the source/emitter of a transistor, which creates local negative feedback. As a result, the source voltage starts to follow the gate/base voltage more closely. This feedback mechanism reduces the transistor’s gain, but improves linearity and stability. In practice, it makes it harder for the transistor to enter non-linear regions of operation, which can improve THD value.
+
+## Degradation of load:
 
 For load without resistor we can get THD = 0.0204%. After implement resistor we can get this table:
 
