@@ -1,6 +1,6 @@
 ## Input stage configurations
 
-For the input stage, the most common solution is a differential pair. The main advantage of this configuration is the ability to apply negative feedback, which can be used to compensate for various non-idealities. To keep the design simple, I implemented a basic differential pair with a current mirror as the active load, along with one improvement. I believe this setup will be sufficient for the goals of this project. I think it will be enought for this project.
+For the input stage, the most common solution is a differential pair. The main advantage of this configuration is the ability to apply negative feedback, which can be used to compensate for various non-idealities. To keep the design simple, I implemented a basic differential pair with a current mirror as the active load, along with one improvement. I believe this setup will be sufficient for the goals of this project and enought.
 
 ## JFET vs BJT
 
@@ -9,12 +9,6 @@ In audio design books, the best choice for input stages are.. BJT. The main reas
 Since my VAS transistor will be NPN, it's generally a good idea to use the opposite type for the input differential pair to ensure proper current flow and biasing. I chose BC556B because it's cheap, has decent gain, and produces low noise plus should withstand a voltage around 50V. And since this is a through-hole design, I can always swap the transistor later if needed.
 
 For load mirror and VAS I used from same family NPN BC557.
-
-## VAS
-
-VAS is just voltage ampifier stage. Initially, I planned to analyze the input differential pair on its own. However, as I progressed, I realized that adding a realistic load would provide more meaningful results. Additionally, since the VAS introduces a 180-degree phase shift, including negative feedback makes the setup more representative of the final circuit, allowing for a more accurate analysis.
-
-Moving forward, for the VAS I used a simple common-emitter configuration with a current source on the collector and diodes for biasing the output stage. It's not complicated and provides decent gain. There were some issues with phase margin at first, but adding a Miller capacitor was enough to stabilize the circuit.
 
 ## Current source
 
@@ -26,31 +20,31 @@ This setup gives me around 2.34 mA. If I need more, I can simply reduce R2. It
 
 ## Analisys of design
 
-Testbench
+I will try to explain my configuration on whole circuit, the result will be more realistic with load instead without it.
 
-![image](https://github.com/user-attachments/assets/b3637ef1-33c9-4390-adb2-ba878bb8a7a2)
+![image](https://github.com/user-attachments/assets/0773d6ad-4286-4de9-bc2a-367374035463)
 
-Parameters for close loop as follower:
-Verror = 21.24uV
-Vout range = <-23.94V; 23.82V>
+First, I’d like to explain the concept of source degeneration. It involves adding a resistor to the source/emitter of a transistor, which creates local negative feedback. As a result, the source voltage starts to follow the gate/base voltage more closely. This feedback mechanism reduces the transistor’s gain, but improves linearity and stability. In practice, it makes it harder for the transistor to enter non-linear regions of operation, which can improve THD value.
 
-Max pssr for BW from 20Hz to 20kHz for close loop as follower:
-PSRRvdd = -124.15dB
-PSRRvss = -111.34dB
+# Degradation of load:
 
-AC analise in open loop:
-Adc = 109.14dB
-f0 = 14.3MHz
-f3dB = 51.137Hz
-PM = 60.105deg
-GM = 11.63dB
+For load without resistor we can get THD = 0.0204%. After implement resistor we can get this table:
 
-![image](https://github.com/user-attachments/assets/d7b71830-cc5c-4249-b99d-0557f77e5068)
+| Resistor [Ω] | THD [%]   |
+|--------------|-----------|
+| 100          | 0.0182    |
+| 200          | 0.0188    |
+| 400          | 0.0205    |
+| 600          | 0.0198    |
+| 800          | 0.0186    |
+| 1000         | 0.0221    |
 
+As you can see for 100Ω and 200Ω we got less that orginal value, then THD is oscilating around 0.02%. For low value of resitor we can see the benefits of degeneration, but for higher resistacne the gain drops and despite Q5 and Q4 works more linear, the whole circuit loses THD by low gain (look at chart).
 
+Chart of gain for difrent resistors:
 
+![image](https://github.com/user-attachments/assets/c883ae25-4699-4cb0-8647-4089f6ca7cd8)
 
+I found sweet point for 220Ω (series E6) value and got around 0.0174% of THD.
 
-
-
-
+# Degradation of differential pair:
