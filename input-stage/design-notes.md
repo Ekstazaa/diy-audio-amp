@@ -1,14 +1,10 @@
 ## Input stage configurations
 
-For the input stage, the most common solution is a differential pair. The main advantage of this configuration is the ability to apply negative feedback, which can be used to compensate for various non-idealities. To keep the design simple, I implemented a basic differential pair with a current mirror as the active load, along with one improvement. I believe this setup will be sufficient for the goals of this project and enought.
+For the input stage, the most common solution is a differential pair. The main advantage of this configuration is the ability to apply negative feedback, which can be used to compensate for various non-idealities. For this chapter a will explain basic work of differential pair, parameters and one improvement.
 
 ## JFET vs BJT
 
 In audio design books, the best choice for input stages are.. BJT. The main reasons are their higher linearity, greater gain, and better temperature stability compared to FETs. The only real drawback of BJTs is the presence of base current, which reduces input impedance. However, in most cases, this trade-off is worth it due to the other significant advantages.
-
-Since my VAS transistor will be NPN, it's generally a good idea to use the opposite type for the input differential pair to ensure proper current flow and biasing. I chose BC556B because it's cheap, has decent gain, and produces low noise plus should withstand a voltage around 50V. And since this is a through-hole design, I can always swap the transistor later if needed.
-
-For load mirror and VAS I used from same family NPN BC557.
 
 ## Current source
 
@@ -51,3 +47,18 @@ Chart of gain for difrent resistors:
 I found sweet point for 220Ω (series E6) value and got around 0.0174% of THD.
 
 # Degradation of differential pair:
+
+
+
+bjt
+definicja pary
+ogólny przykład
+parametry:
+- rezystancja wejściowa
+- wzmocnienie róznicowe,
+- wzmocnienie lewej i prawej gałęzi
+- wzmocnienie cmrr
+slew rate
+obciążenia pary
+degradacja pary
+inne konfiguracje
