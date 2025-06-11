@@ -1,58 +1,39 @@
 ## Input stage configurations
 
-For the input stage, the most common solution is a differential pair. The main advantage of this configuration is the ability to apply negative feedback, which can be used to compensate for various non-idealities. For this chapter a will explain basic work of differential pair, parameters and one improvement.
+For the input stage, the most common solution is a differential pair. The main advantage of this configuration is the ability to apply negative feedback, which can be used to compensate for various non-idealities. For this chapter a will explain basic work of differential pair, parameters and some improvements.
 
 ## JFET vs BJT
 
-In audio design books, the best choice for input stages are.. BJT. The main reasons are their higher linearity, greater gain, and better temperature stability compared to FETs. The only real drawback of BJTs is the presence of base current, which reduces input impedance. However, in most cases, this trade-off is worth it due to the other significant advantages.
+In audio design books, the best choice for input stages for power amplifiers are.. BJT. The main reasons are their higher linearity, greater gain, and better temperature stability compared to FETs. The only real drawback of BJTs is the presence of base current, which reduces input impedance. However, in most cases, this trade-off is worth it due to the other significant advantages.
 
-## Current source
+# Differential pair
 
-As current source I used this configuration:
+![image](https://github.com/user-attachments/assets/726ff399-3be6-479d-9154-1d076e55de30)
 
-<img src="https://github.com/user-attachments/assets/8c33b94b-ea38-443c-873c-456c7c9793ff" width="550" height="400">
+A differential pair is a circuit built from two **identical** transistors with same load supplied by a constant current source. The core idea is that the current through each transistor depends on the voltage difference between the two inputs. If both inputs are equal, the current splits evenly — each side conducts I/2. When vin1 is higher than vin2, more current flows through the transistor on the right side what causes higher voltage on vout2 and vice versa. 
 
-This setup gives me around 2.34 mA. If I need more, I can simply reduce R2. It's a really simple solution, but it has one drawback, current flows continuously through R1.
+![image](https://github.com/user-attachments/assets/5b9465f2-5fcf-4630-8122-23765ab88b20)
 
-# Analisys of design
+At start let's look at the chart above. It shows how the current through resistors R1 and R2 changes depending on the voltage difference between the inputs (note: negative values indicate that vin1 < vin2).
+This graph has few conclusions:
 
-## DC
+1. The characteristic curve assumes perfectly matched transistors, which means the current splits evenly (I/2) when the voltage difference is exactly 0 V. In reality, transistors can have slight mismatches due to manufacturing tolerances, leading to input offset current or voltage, even when vin1 = vin2.
+2. The linear operating region of the differential pair is quite narrow (around ±100 mV). This means the input stage is very sensitive, and even a small voltage difference between the inputs can lead to a significant imbalance in output current - in other words differencial pair has huge gain. Outside that range, one transistor begins to dominate completely, pushing the other almost into cutoff.
+3. As we move further outside the linear range, one of the transistors starts to dominate entirely, conducting nearly the full bias current, while the other one effectively shuts off. At this point, the circuit loses its linear behavior and enters a region where the output no longer changes proportionally to the input difference. In practical terms, this limits how large the differential input voltage can be **before distortion appears**.
 
-![image](https://github.com/user-attachments/assets/1b2819e3-61c3-4966-965a-6cf3969fbc8d)
-![image](https://github.com/user-attachments/assets/0156c188-108b-4c87-997a-081deb0d2183)
+In audio designs, the input signal is usually kept within the linear region, often by using some form of negative feedback or by limiting the gain.
 
+## Gains of differental pair
 
-
-I’d like to explain the concept of source degeneration. It involves adding a resistor to the source/emitter of a transistor, which creates local negative feedback. As a result, the source voltage starts to follow the gate/base voltage more closely. This feedback mechanism reduces the transistor’s gain, but improves linearity and stability. In practice, it makes it harder for the transistor to enter non-linear regions of operation, which can improve THD value.
-
-## Degradation of load:
-
-For load without resistor we can get THD = 0.0204%. After implement resistor we can get this table:
-
-| Resistor [Ω] | THD [%]   |
-|--------------|-----------|
-| 100          | 0.0182    |
-| 200          | 0.0188    |
-| 400          | 0.0205    |
-| 600          | 0.0198    |
-| 800          | 0.0186    |
-| 1000         | 0.0221    |
-
-As you can see for 100Ω and 200Ω we got less that orginal value, then THD is oscilating around 0.02%. For low value of resitor we can see the benefits of degeneration, but for higher resistacne the gain drops and despite Q5 and Q4 works more linear, the whole circuit loses THD by low gain (look at chart).
-
-Chart of gain for difrent resistors:
-
-![image](https://github.com/user-attachments/assets/c883ae25-4699-4cb0-8647-4089f6ca7cd8)
-
-I found sweet point for 220Ω (series E6) value and got around 0.0174% of THD.
-
-# Degradation of differential pair:
+Just like the differential pair has two inputs, it also has two outputs. Because of that, we can define three different types of voltage gain, depending on how we observe the outputs:
+1. Gain measured at vout1:
 
 
 
-bjt
-definicja pary
-ogólny przykład
+2. Gain measured at vout2
+- And the differential gain, which is the difference between vout1 and vout2
+
+
 parametry:
 - rezystancja wejściowa
 - wzmocnienie róznicowe,
@@ -62,3 +43,12 @@ slew rate
 obciążenia pary
 degradacja pary
 inne konfiguracje
+
+
+## Current source
+
+As current source I used this configuration:
+
+<img src="https://github.com/user-attachments/assets/8c33b94b-ea38-443c-873c-456c7c9793ff" width="550" height="400">
+
+This setup gives me around 2.34 mA. If I need more, I can simply reduce R2. It's a really simple solution, but it has one drawback, current flows continuously through R1.
