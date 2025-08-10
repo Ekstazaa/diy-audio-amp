@@ -1,6 +1,6 @@
 ## Input stage configurations
 
-For the input stage, the most common solution is a differential pair. The main advantage of this configuration is the ability to apply negative feedback, which can be used to compensate for various non-idealities. For this chapter a will explain basic work of differential pair, parameters and some improvements.
+For the input stage, the most common solution is a differential pair. The main advantage of this configuration is the ability to apply negative feedback, which can be used to compensate for various non-idealities. For this chapter I will explain basic work of differential pair, parameters and some improvements.
 
 ## JFET vs BJT
 
@@ -47,18 +47,37 @@ Where:
 
 As I mentioned earlier when discussing BJTs, one of the key issues is the input impedance, since a continuous base current flows into the transistor.
 
-From the perspective of the PNP transistor currnet is going from emitter to inpu, so we consider r<sub>b'e</sub> for both transistors in the differential pair:
+From the perspective of the PNP transistor currnet is going from emitter to input, so we consider r<sub>b'e</sub> for both transistors in the differential pair:
 
 **R<sub>in</sub> = 2 · r<sub>b'e</sub> = 2 · β · r<sub>eb'</sub>**
 
 ## CMRR 
 
-CMRR is 
+CMRR (Common-Mode Rejection Ratio) is the ability of an amplifier to reject noise that appears equally on both inputs. Formally, it is defined as the ratio between the differential gain (A<sub>diff</sub>) and the common-mode gain(A<sub>cm</sub>) and that mean we would like to have it as huge as it's posible and the nest solution is to provide large differential gain.
 
-parametry:
-- wzmocnienie cmrr
-slew rate
-obciążenia pary
+**CMRR = 20 · log(A<sub>diff</sub>/A<sub>cm</sub>)**
+
+
+## Slew rate
+
+Slew rate is a parameter that defines how quickly an amplifier can change its output voltage, effectively determining how fast it can turn the next stage on or off.
+
+**Slew rate = dVout/dt = Iss/CL
+
+For a differential pair with a current mirror load, the concept is easier to explain:
+
+- When discharging the load, we assume that transistor M2 is fully on and M1 is off. In that case, the entire tail current from the pair’s current source flows through M2 to ground.
+
+- Conversely, when charging the load, the process also happens with a current equal to the current source value.
+
+Differential pairs with resistive loads typically have an asymmetrical slew rate, because the load resistor diverts part of the current, reducing the effective charging or discharging capability.
+
+<img width="501" height="219" alt="image" src="https://github.com/user-attachments/assets/4b3084d9-0bf7-4412-a156-82c576edb490" />
+
+
+## Load of differential pair
+
+
 degradacja pary
 inne konfiguracje
 
