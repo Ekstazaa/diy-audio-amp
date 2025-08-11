@@ -53,10 +53,23 @@ From the perspective of the PNP transistor currnet is going from emitter to inpu
 
 ## CMRR 
 
-CMRR (Common-Mode Rejection Ratio) is the ability of an amplifier to reject noise that appears equally on both inputs. Formally, it is defined as the ratio between the differential gain (A<sub>diff</sub>) and the common-mode gain(A<sub>cm</sub>) and that mean we would like to have it as huge as it's posible and the nest solution is to provide large differential gain.
+CMRR (Common-Mode Rejection Ratio) is the ability of an amplifier to reject noise that appears equally on both inputs. Formally, it is defined as the ratio between the differential gain (A<sub>diff</sub>) and the common-mode gain(A<sub>cm</sub>) and that mean we would like to have it as huge as it's posible and the best solution is to provide large differential gain.
 
 **CMRR = 20 · log(A<sub>diff</sub>/A<sub>cm</sub>)**
 
+## Load of differential pair
+
+For a differential pair, even with a simple implementation, you can identify three main variants of loading:
+a) Unbalanced resistive load
+b) Balanced load using resistors
+c) Balanced load with a current mirror
+
+In our case, the pair will eventually be loaded by the next stage (VAS), which introduces imbalance between the branches. This makes solution (a), using equal resistors in both collectors, a less attractive choice.
+
+Circuit (b) improves the situation by using a single resistor to balance the load, but this is still only a passive compensation method.
+The best solution is (c) — the current mirror load — because the transistor in the unloaded branch biases the other transistor, forcing an identical current in the loaded branch. This ensures excellent balance and better performance. Moreover, method (c) offers the best linearity among the three.
+
+<img width="627" height="355" alt="image" src="https://github.com/user-attachments/assets/6cee3803-1442-45cd-a515-cc2c1565ee9d" />
 
 ## Slew rate
 
@@ -74,18 +87,20 @@ Differential pairs with resistive loads typically have an asymmetrical slew rate
 
 <img width="501" height="219" alt="image" src="https://github.com/user-attachments/assets/4b3084d9-0bf7-4412-a156-82c576edb490" />
 
+# Summary
 
-## Load of differential pair
+For final design i used combination below:
+
+<img width="414" height="776" alt="image" src="https://github.com/user-attachments/assets/aabd021c-c49b-4b51-92bd-2afab52c0369" />
+
+If you are using a common differential pair with a current mirror load, there is not much you can adjust beyond selecting the transistors and setting the operating point via the current source. I chose the transistors based on their maximum V<sub>CE</sub> (50 V) for safety, and then balanced cost against noise performance. If you are more precise, you can look at β parameter which is mainly relevant for the input pair, since a higher value ensures greater input impedance.
+
+As the current source, I used a configuration with a transistor biased by diodes and a resistor. I also added a potentiometer to allow fine-tuning if needed, and a capacitor Cf1 for filtering, because some AC signal was leaking into the bias voltage.
+
+Initially, I started with 2.5 mA from the source, but after building the whole configuration I decided to reduce it to 1.88 mA.
+Keep in mind that this current not only sets the operating point but also affects your gain — and, more importantly, your slew rate.
+
+As mentioned earlier, slew rate defines how fast your circuit can respond. If it’s too slow, the amplifier can start cutting off higher audio frequencies. If it’s too fast, you risk turning your design into an oscillator due to the effects of negative feedback.
 
 
-degradacja pary
-inne konfiguracje
 
-
-## Current source
-
-As current source I used this configuration:
-
-<img src="https://github.com/user-attachments/assets/8c33b94b-ea38-443c-873c-456c7c9793ff" width="550" height="400">
-
-This setup gives me around 2.34 mA. If I need more, I can simply reduce R2. It's a really simple solution, but it has one drawback, current flows continuously through R1.
