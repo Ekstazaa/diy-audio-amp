@@ -102,5 +102,6 @@ Keep in mind that this current not only sets the operating point but also affect
 
 As mentioned earlier, slew rate defines how fast your circuit can respond. If it’s too slow, the amplifier can start cutting off higher audio frequencies. If it’s too fast, you risk turning your design into an oscillator due to the effects of negative feedback.
 
-
-
+Bibliography:
+1. Douglas Self, Audio Power Amplifier Design Handbook 4th edition, Elsevier, 2006
+2. R. J. Baker, Circuit Design, Layout, and Simulation 3th Edition, Wiley, 2010 
